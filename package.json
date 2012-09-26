@@ -1,0 +1,27 @@
+{
+  "name": "routable",
+  "version": "0.0.1",
+  "description": "Create routable components that can be mounted to each other via a simple API.",
+  "homepage": "https://github.com/RGBboy/routable",
+  "keywords": ["express", "component", "router"],
+  "author": "RGBboy <me@rgbboy.com>",
+  "main": "index",
+  "engines": {
+    "node": "0.8.x"
+  },
+  "dependencies": {
+    "express": "3.0.x",
+    "express-named-routes": "0.0.x"
+  },
+  "devDependencies": {
+    "jade": "0.27.x",
+    "mocha": "1.5.x",
+    "superagent": "0.9.x",
+    "should": "1.2.x"
+  },
+  "scripts" : {
+    "test" : "make test",
+    "unit" : "make unit",
+    "spec" : "make spec"
+  }
+}

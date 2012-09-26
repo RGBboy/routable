@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  if locals.back
+    a.btn(href = back) Back
+  if locals.next
+    a.btn(href = next) Next
