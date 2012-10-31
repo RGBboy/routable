@@ -25,7 +25,7 @@ app.defineRoute('index', '/');
 app.defineRoute('signup', '/signup');
 
 app.get(app.lookupRoute('index'), function (req, res) {
-  res.locals.next = req.routeToPath('component');
+  res.locals.next = req.routeToPath('component.index');
   res.render('index', {
     title: 'Index'
   });

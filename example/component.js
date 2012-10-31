@@ -40,6 +40,7 @@ exports = module.exports = function (route) {
     next();
   })
 
+  // show
   that.get(that.lookupRoute('show'), function (req, res, next) {
     if (!req.component) {
       next(new Error('Route Not Found'));
@@ -50,12 +51,13 @@ exports = module.exports = function (route) {
     } else {
       res.locals.back = req.routeToPath('child-component.show', { componentId: req.component - 1, childComponentId: 3 });
     }
-    res.locals.next = req.routeToPath('child-component');
+    res.locals.next = req.routeToPath('child-component.index');
     res.render('index', {
       title: 'Component ' + req.component
     })
   });
 
+  // child-component
   that.childComponentInstance = childComponent(that.lookupRoute('show') + '/child-component');
   that.attachComponent('child-component', that.childComponentInstance);
 

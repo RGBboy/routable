@@ -18,7 +18,6 @@ exports = module.exports = function (route) {
 
   // index
   that.get(that.lookupRoute('index'), function(req, res, next) {
-    console.log(req.globalRouteToPath('signup'))
     res.locals.next = req.routeToPath('show', { childComponentId: 1 });
     res.render('index', {
       title: 'Child Component Index'

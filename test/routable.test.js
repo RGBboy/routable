@@ -2,9 +2,7 @@
  * Module dependencies.
  */
 
-var express = require('express'),
-    should = require('should'),
-    request = require('superagent'),
+var should = require('should'),
     routable = require('../');
 
 describe('Named Routes', function () {
