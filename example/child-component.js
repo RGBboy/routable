@@ -18,6 +18,8 @@ exports = module.exports = function (route) {
 
   // index
   that.get(that.lookupRoute('index'), function(req, res, next) {
+    // test getting a parent route from inside an attached component.
+    console.log(req.routeToPath('signup'));// should not throw!
     res.locals.next = req.routeToPath('show', { childComponentId: 1 });
     res.render('index', {
       title: 'Child Component Index'
