@@ -5,7 +5,7 @@
 var should = require('should'),
     routable = require('../');
 
-describe('Named Routes', function () {
+describe('Routable', function () {
 
   describe('.version', function () {
 
