@@ -5,6 +5,10 @@
   "homepage": "https://github.com/RGBboy/routable",
   "keywords": ["express", "component", "router"],
   "author": "RGBboy <me@rgbboy.com>",
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/RGBboy/routable"
+  },
   "main": "index",
   "engines": {
     "node": "0.8.x"
