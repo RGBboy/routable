@@ -16,4 +16,13 @@ describe('Routable', function () {
 
   });
 
+  describe('.extend', function () {
+
+    it('should be a function', function (done) {
+      routable.extend.should.be.a.function;
+      done();
+    });
+
+  });
+
 });

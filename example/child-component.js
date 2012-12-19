@@ -6,55 +6,62 @@
 * Module Dependencies
 */
 
-var routable = require('../index');
+var EventEmitter = require('events').EventEmitter,
+    routable = require('../index');
 
 /**
 * Module Exports
 */
 
-exports = module.exports = function (route) {
+exports = module.exports = function () {
 
-  var that = routable(route);
+  var self = new EventEmitter();
+  
+  routable.extend(self);
 
-  // index
-  that.get(that.lookupRoute('index'), function(req, res, next) {
-    // test getting a parent route from inside an attached component.
-    console.log(req.routeToPath('signup'));// should not throw!
-    res.locals.next = req.routeToPath('show', { childComponentId: 1 });
-    res.render('index', {
-      title: 'Child Component Index'
+  self.on('attached', function () {
+    // Define Routes
+    self.defineRoute('index', '/');
+    self.defineRoute('show', '/:childComponentId');
+
+    // index
+    self.get(self.lookupRoute('index'), function(req, res, next) {
+      // test getting a parent route from inside an attached component.
+      console.log(req.routeToPath('signup'));// should not throw!
+      res.locals.next = req.routeToPath('show', { childComponentId: 1 });
+      res.render('index', {
+        title: 'Child Component Index'
+      });
     });
-  });
 
-  that.defineRoute('show', '/:childComponentId');
+    // load
+    self.get(self.lookupRoute('show'), function (req, res, next) {
+      var param = req.params.childComponentId;
+      if (/^\d+$/.test(param)) {
+        req.childComponent = Number(param);
+      };
+      next();
+    })
 
-  // load
-  that.get(that.lookupRoute('show'), function (req, res, next) {
-    var param = req.params.childComponentId;
-    if (/^\d+$/.test(param)) {
-      req.childComponent = Number(param);
-    };
-    next();
+    self.get(self.lookupRoute('show'), function (req, res, next) {
+      if (!req.childComponent) {
+        next(new Error('Route Not Found'));
+        return;
+      };
+      if (req.childComponent <= 1) {
+        res.locals.back = req.routeToPath('index');
+      } else {
+        res.locals.back = req.routeToPath('show', { childComponentId: req.childComponent - 1 });
+      };
+      if (req.childComponent < 3) {
+        res.locals.next = req.routeToPath('show', { childComponentId: req.childComponent + 1 });
+      }
+      res.render('index', {
+        title: 'Child Component ' + req.childComponent
+      });
+    });
   })
 
-  that.get(that.lookupRoute('show'), function (req, res, next) {
-    if (!req.childComponent) {
-      next(new Error('Route Not Found'));
-      return;
-    };
-    if (req.childComponent <= 1) {
-      res.locals.back = req.routeToPath('index');
-    } else {
-      res.locals.back = req.routeToPath('show', { childComponentId: req.childComponent - 1 });
-    };
-    if (req.childComponent < 3) {
-      res.locals.next = req.routeToPath('show', { childComponentId: req.childComponent + 1 });
-    }
-    res.render('index', {
-      title: 'Child Component ' + req.childComponent
-    });
-  });
-
-  return that;
+  return self;
 
 };
