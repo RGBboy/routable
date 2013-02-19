@@ -1,6 +1,6 @@
 {
   "name": "routable",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Create routable components that can be mounted to each other via a simple API.",
   "homepage": "https://github.com/RGBboy/routable",
   "keywords": ["express", "component", "router"],
