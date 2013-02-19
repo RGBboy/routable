@@ -60,7 +60,16 @@ exports = module.exports = function () {
         title: 'Child Component ' + req.childComponent
       });
     });
+
+    console.log('Child Component - Ready');
+    self.emit('ready', self);
+
   })
+
+  process.nextTick(function () {
+    console.log('Child Component - Init');
+    self.emit('init', self);
+  });
 
   return self;
 

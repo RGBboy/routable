@@ -76,6 +76,16 @@ exports = module.exports = function () {
     })
   })
 
+  childComponent.on('init', function () {
+    console.log('Component - Init');
+    self.emit('init', self);
+  });
+
+  childComponent.on('ready', function () {
+    console.log('Component - Ready');
+    self.emit('ready', self);
+  });
+
   return self;
 
 };

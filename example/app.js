@@ -10,49 +10,74 @@ var express = require('express'),
     app = express(),
     namedRoutes = require('express-named-routes'),
     attach = require('attach'),
-    Component = require('./component'),
-    component = new Component();
-
-namedRoutes.extend(app);
-attach.extend(app);
-
-// Views
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
-app.set('view options', { layout: false });
-
-app.use(express.logger('dev'));
-app.use(express.static(__dirname + '/public'));
-
-app.defineRoute('index', '/');
-app.defineRoute('signup', '/signup');
-app.defineRoute('component', '/component');
-
-app.get(app.lookupRoute('index'), function (req, res) {
-  res.locals.next = req.routeToPath('component.index');
-  res.render('index', {
-    title: 'Index'
-  });
-});
-
-app.get(app.lookupRoute('component') + '*', function (req, res, next) {
-  res.locals.back = req.routeToPath('index');
-  next();
-});
-
-app.attach('component', component);
-
-app.get('*', function (req, res, next) {
-  next('route');
-})
-
-app.use(express.errorHandler());
+    Component = require('./component');
 
 /**
-* Module Exports
-*/
+ * Module Exports
+ */
+
+exports = module.exports = function () {
+
+  var self = express(),
+      component = Component();
+
+  namedRoutes.extend(self);
+  attach.extend(self);
+
+  function init () {
+
+    console.log('Application - Init');
+
+    // Views
+    self.set('views', __dirname + '/views');
+    self.set('view engine', 'jade');
+    self.set('view options', { layout: false });
+
+    self.use(express.logger('dev'));
+    self.use(express.static(__dirname + '/public'));
+
+    self.defineRoute('index', '/');
+    self.defineRoute('signup', '/signup');
+    self.defineRoute('component', '/component');
+
+    self.get(self.lookupRoute('index'), function (req, res) {
+      res.locals.next = req.routeToPath('component.index');
+      res.render('index', {
+        title: 'Index'
+      });
+    });
+
+    self.get(self.lookupRoute('component') + '*', function (req, res, next) {
+      res.locals.back = req.routeToPath('index');
+      next();
+    });
+
+    self.attach('component', component);
+
+    self.get('*', function (req, res, next) {
+      next('route');
+    })
+
+    self.use(express.errorHandler());
+
+  };
+
+  function ready () {
+    console.log('Application - Ready');
+    self.emit('ready');
+  };
+
+  component.on('init', init);
+  component.on('ready', ready);
+
+  return self;
+
+};
 
 if (!module.parent) {
-  app.listen(8000);
-  console.log('Express app started on port 8000');
+  var app = module.exports();
+  app.on('ready', function () {
+    app.listen(8000);
+    console.log('App started on port 8000');
+  });
 };
